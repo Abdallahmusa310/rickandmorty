@@ -6,7 +6,7 @@ class CharactersRepo {
 
   CharactersRepo({required this.charactersapi});
 
-  Future<List<dynamic>> getallcharacters() async {
+  Future<List<Charactersmodel>> getallcharacters() async {
     final characters = await charactersapi.getallcharacters();
     return characters
         .map((character) => Charactersmodel.fromJson(character))
