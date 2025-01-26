@@ -5,8 +5,8 @@ class Charactersmodel {
   late String species;
   late String gender;
   late String image;
-  late List<dynamic> episodes;
-  late List<dynamic> origin;
+  late List<String> episode;
+  late Map<String, dynamic> origin;
 
   Charactersmodel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -15,7 +15,7 @@ class Charactersmodel {
     species = json["species"];
     gender = json["gender"];
     image = json["image"];
-    episodes = json["episode"];
+    episode = List<String>.from(json["episode"]);
     origin = json["origin"];
   }
 }

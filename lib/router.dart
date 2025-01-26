@@ -11,7 +11,7 @@ class Approuter {
   late CharactersRepo charactersRepo;
   late CharacterCubit characterCubit;
   Approuter() {
-    charactersRepo = CharactersRepo(charactersapi: Charactersapi());
+    charactersRepo = CharactersRepo(charactersapi: CharactersApi());
     characterCubit = CharacterCubit(charactersRepo);
   }
 

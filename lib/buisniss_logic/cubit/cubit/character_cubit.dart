@@ -7,14 +7,17 @@ part 'character_state.dart';
 
 class CharacterCubit extends Cubit<CharacterState> {
   final CharactersRepo charactersRepo;
-  late List<Charactersmodel> chracters;
+  List<Charactersmodel> chracters = [];
   CharacterCubit(this.charactersRepo) : super(RickandmortyInitial());
 
-  List<Charactersmodel> getallcharacters() {
-    charactersRepo.getallcharacters().then((character) {
-      emit(Characterssucsses(character));
-      chracters = character;
-    });
-    return chracters;
+  void getallcharacters() async {
+    emit(CharactersLoading());
+    try {
+      final characters = await charactersRepo.getallcharacters();
+      chracters = characters;
+      emit(Characterssucsses(characters));
+    } catch (e) {
+      emit(CharactersError(e.toString()));
+    }
   }
 }

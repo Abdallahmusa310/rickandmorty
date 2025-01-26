@@ -9,3 +9,13 @@ class Characterssucsses extends CharacterState {
   final List<Charactersmodel> characters;
   Characterssucsses(this.characters);
 }
+
+class CharactersLoading extends CharacterState {
+  final List<Charactersmodel>? characters;
+  CharactersLoading([this.characters]);
+}
+
+class CharactersError extends CharacterState {
+  final String message;
+  CharactersError(this.message);
+}
