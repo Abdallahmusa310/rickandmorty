@@ -13,7 +13,79 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+  Charactersmodel? character;
+  bool isSearching = false;
   late List<Charactersmodel> allcharacters;
+  late List<Charactersmodel> searchedForCharacters;
+  final searchtextcontroler = TextEditingController();
+  Widget buildCharactersTextfeild() {
+    return TextField(
+      controller: searchtextcontroler,
+      cursorColor: Appcolors.gray,
+      decoration: InputDecoration(
+        hintText: 'Find character....',
+        border: InputBorder.none,
+      ),
+      onChanged: (searchedCharacters) {
+        addsearcheditemstosearchedlist(searchedCharacters);
+      },
+    );
+  }
+
+  void addsearcheditemstosearchedlist(String searchedCharacters) {
+    searchedForCharacters = allcharacters
+        .where((character) =>
+            character.name.toLowerCase().startsWith(searchedCharacters))
+        .toList();
+    setState(() {});
+  }
+
+  List<Widget> buildappbaractions() {
+    if (isSearching) {
+      return [
+        IconButton(
+            onPressed: () {
+              clearsearch();
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.clear,
+            ))
+      ];
+    } else {
+      return [
+        IconButton(
+            onPressed: () {
+              startsearching();
+            },
+            icon: Icon(
+              Icons.search,
+            ))
+      ];
+    }
+  }
+
+  void startsearching() {
+    ModalRoute.of(context)!
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: stopsearching));
+    setState(() {
+      isSearching = true;
+    });
+  }
+
+  void stopsearching() {
+    clearsearch();
+    setState(() {
+      isSearching = false;
+    });
+  }
+
+  void clearsearch() {
+    setState(() {
+      searchtextcontroler.clear();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,22 +144,32 @@ class _HomescreenState extends State<Homescreen> {
           childAspectRatio: 3 / 3,
           crossAxisSpacing: 0.5,
           mainAxisSpacing: 0.5),
-      itemCount: allcharacters.length,
+      itemCount: searchtextcontroler.text.isEmpty
+          ? allcharacters.length
+          : searchedForCharacters.length,
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
-        return CharacterItem(charcter: allcharacters[index]);
+        return CharacterItem(
+            charcter: searchtextcontroler.text.isEmpty
+                ? allcharacters[index]
+                : searchedForCharacters[index]);
       },
     );
+  }
+
+  Widget buildAppbartitle() {
+    return Center(child: Text('Characters'));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Appcolors.yellow,
-          title: Center(child: Text('Characters')),
-        ),
+            actions: buildappbaractions(),
+            backgroundColor: Appcolors.yellow,
+            title:
+                isSearching ? buildCharactersTextfeild() : buildAppbartitle()),
         body: buildblocwidget());
   }
 }

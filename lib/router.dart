@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rickandmorty/buisniss_logic/cubit/cubit/character_cubit.dart';
 import 'package:rickandmorty/constans/strings.dart';
 import 'package:rickandmorty/data/api/characters_api.dart';
+import 'package:rickandmorty/data/models/characters_model.dart';
 import 'package:rickandmorty/data/repository/characters_repo.dart';
 import 'package:rickandmorty/presntion/screens/details_screen.dart';
 import 'package:rickandmorty/presntion/screens/home_screen.dart';
@@ -24,7 +25,11 @@ class Approuter {
                   child: Homescreen(),
                 ));
       case detalisscreen:
-        return MaterialPageRoute(builder: (_) => DetailsScreen());
+        final character = setting.arguments as Charactersmodel;
+        return MaterialPageRoute(
+            builder: (_) => DetailsScreen(
+                  character: character,
+                ));
     }
   }
 }
